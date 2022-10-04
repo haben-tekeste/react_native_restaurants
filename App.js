@@ -1,20 +1,29 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from "react";
+import { decode, encode } from "base-64";
+import { createAppContainer } from "react-navigation";
+import { createStackNavigator } from "react-navigation-stack";
+import SearchScreen from "./src/Screens/SearchScreen";
+import ResultsShowScreen from "./src/Screens/ResultsShowScreen";
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+if (!global.btoa) {
+  global.btoa = encode;
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+if (!global.atob) {
+  global.atob = decode;
+}
+
+const navigator = createStackNavigator(
+  {
+    Search: SearchScreen,
+    Results: ResultsShowScreen,
   },
-});
+  {
+    initialRouteName: "Search",
+    defaultNavigationOptions: {
+      title: "Business Search",
+    },
+  }
+);
+
+export default createAppContainer(navigator);
